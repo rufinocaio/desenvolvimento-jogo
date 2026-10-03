@@ -1,0 +1,18 @@
+Sobre o Global.hpp
+
+Na fase anterior a gente teve que chutar o EPSILON. Agora o header
+oficial existe e é a fonte única, ninguém redefine isso em outro
+arquivo.
+
+EPSILON = 0.0001. É o que o Vector2D usa pra comparar float e pra
+recusar divisão/normalização perto de zero.
+
+TILE_SIZE = 64. Tile, sprite e NPC usam o mesmo tamanho. Collision2D
+nasce com metade disso em cada eixo, então o AABB padrão dá 64x64.
+
+Mundo contínuo em pixels, Y pra baixo. Índice de célula não se
+guarda, deriva da posição: floor(x/64), floor(y/64).
+
+Jogador é id 100. Entidades geradas começam no 1000 pra não
+encavalar com o player. EMPTY_TILE = 0 (anda), WALL_TILE = 1
+(bloqueia).

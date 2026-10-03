@@ -1,0 +1,23 @@
+Implementação do Collision2D.cpp (contrato no Collision2D.hpp)
+
+Não resolve a colisão, só pergunta se as duas caixas se tocam
+(narrow-phase). Forma padrão é quadrado de TILE_SIZE, 64x64.
+
+AABB é caixa alinhada aos eixos, dois cantos. min é menor x e menor
+y (canto superior esquerdo, Y cresce pra baixo). max é o inferior
+direito.
+
+intersects dá true se sobrepõem. Encostar no bordo também conta, por
+isso usei <= e não <. A regra é cruzar em X e em Y ao mesmo tempo:
+
+min.x <= other.max.x && other.min.x <= max.x
+min.y <= other.max.y && other.min.y <= max.y
+
+Se uma caixa tá inteira do lado da outra, não colide.
+
+Collision2D é o que a entidade carrega: halfExtents (metade da
+largura e da altura). Default já vem TILE_SIZE/2. bounds(position)
+monta o AABB no mundo, centrado na posição — min = position -
+halfExtents, max = position + halfExtents. A posição continua sendo
+a referência, a caixa é calculada na hora e não fica guardada
+junto.

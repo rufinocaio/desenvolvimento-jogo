@@ -1,0 +1,19 @@
+Implementação do RigidBody2D.cpp (contrato no RigidBody2D.hpp)
+
+O nome é de corpo rígido, mas o que o header descreve é ponto
+material: position, velocity, acceleration. Sem massa, sem torque,
+sem giro. Movimento no plano, em pixels.
+
+integrate(dt) dá um passo. Euler semi-implícito, nessa ordem:
+
+velocity += acceleration * dt;
+position += velocity * dt;
+
+A velocidade já atualizada entra na posição. Se usasse a antiga
+(Euler explícito) o mesmo dt fica mais instável, o contrato evita
+isso de propósito. dt é em segundos e tem que ser > 0, tem assert
+pra 0 e negativo.
+
+Quem preenche a aceleração é o resto do jogo (gravidade, input).
+Aqui só integro o que já tá no corpo. O cpp ficou curto porque a
+conta inteira já tava no contrato, não tinha o que inventar.
