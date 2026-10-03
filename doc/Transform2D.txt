@@ -1,0 +1,43 @@
+Implementação do Transform2D.cpp (contrato no Transform2D.hpp)
+
+Matriz 3x3 que junta translação, rotação e escala numa transformação
+só. Fica em m[3][3], linha por linha. Sem ninguém mexer, nasce
+identidade (não faz nada):
+
+1 0 0
+0 1 0
+0 0 1
+
+O header é chato com a convenção e tem que ser. Vetor fica à esquerda,
+estilo DirectX. Ponto é [x, y, 1], direção é [x, y, 0]. Translação
+vai na terceira LINHA (m[2][0] e m[2][1]), não na coluna. Quem vier
+com a cabeça no OpenGL vai colocar tx e ty no lugar errado.
+
+A * B aplica A primeiro e B depois, lê da esquerda pra direita. É o
+contrário do M * v de livro.
+
+Nas factories eu não preencho os nove números. Crio um Transform2D
+(já vem identidade) e só escrevo o que muda, assim a terceira coluna
+continua [0, 0, 1] sem eu ficar lembrando. translation só mexe na
+terceira linha. rotation preenche o 2x2 do contrato:
+
+cos(a)   sin(a)
+-sin(a)  cos(a)
+
+Ângulo positivo é anti-horário. Parece invertido se você tá acostumado
+com matriz vezes coluna, mas com vetor-linha a conta fica
+x' = x*cos - y*sin, y' = x*sin + y*cos. scale só troca a diagonal.
+
+Produto de matriz é linha vezes coluna. Não escrevo em cima da própria
+matriz enquanto ainda tô lendo ela, bagunça o que ainda falta somar.
+O * cria um temporário e devolve. O *= é *this = *this * rhs.
+
+transform_point usa w=1, então a translação entra — é pra colocar
+sprite no mundo. transform_vector usa w=0 e ignora a terceira linha,
+então velocidade/normal/offset giram e escalam sem serem arrastados
+pela posição. Se eu usasse sempre w=1, andar com o personagem
+andaria a direção em que ele olha também. Se usasse sempre w=0, o
+sprite não saía da origem. Por isso a matriz é 3x3 e não 2x2.
+
+Tudo noexcept (só conta de float). Não fiz inversa, o contrato não
+pedia.

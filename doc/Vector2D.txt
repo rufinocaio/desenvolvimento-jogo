@@ -1,0 +1,34 @@
+Implementação do Vector2D.cpp (contrato no Vector2D.hpp)
+
+Vector2D é um (x, y). Ponto ou direção, depende do uso. O header já
+tem o que é direto: construtor, length_squared, length, dot e cross.
+O cpp só implementa o que tinha pré-condição ou não fazia sentido
+deixar inline.
+
+length_squared é x*x + y*y, usei isso quando só precisava comparar
+distância (evita o sqrt). length() é a raiz. dot projeta um no outro;
+se der positivo, apontam pro mesmo lado. cross em 2D devolve um
+escalar, não um vetor — sinal diz o sentido (positivo = anti-horário)
+e o módulo é a área do paralelogramo.
+
+normalized() e normalize() fazem a mesma conta (divide pelo
+comprimento). A primeira devolve cópia, a segunda altera o próprio
+objeto. Os dois estouram assert se o vetor for quase zero, porque
+vetor nulo não tem direção. Pensei em devolver (1,0) nesse caso e
+desisti, ia esconder chamada errada.
+
+equals não usa ==. Float depois de conta quase nunca cai no mesmo
+bit, então comparo se a diferença de cada componente cabe no
+EPSILON (ou na tolerância que passarem).
+
++ - * devolvem vetor novo. += -= *= mexem no que já existe e
+devolvem *this. Divisão (tanto / quanto /=) também tem assert se o
+escalar estiver perto de zero.
+
+Tive que colocar um operator* fora da classe. v * 2.0f funciona
+porque o vetor tá à esquerda, mas 2.0f * v não chama o membro. A
+função solta só inverte e chama vec * scalar.
+
+Essas funções foram pro cpp ou porque chamam sqrt/abs, ou porque
+têm assert. O header já tinha separado declaração e corpo, eu só
+fechei o lado de cá.
